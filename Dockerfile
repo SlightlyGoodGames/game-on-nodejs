@@ -2,9 +2,14 @@ FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
 
-COPY . .
+COPY libs/Java-WebSocket-1.6.0.jar libs/
+COPY src/main/java src/main/java
 
-RUN mkdir -p out && \
-    javac -d out $(find src/main/java -name "*.java")
+RUN mkdir -p out
 
-CMD ["java", "-cp", "out", "net.gameonline.server.Main"]
+RUN javac \
+    -cp "libs/Java-WebSocket-1.6.0.jar" \
+    -d out \
+    $(find src/main/java -name "*.java")
+
+CMD ["java", "-cp", "out:libs/Java-WebSocket-1.6.0.jar", "net.gameonline.server.Main"]
