@@ -7,8 +7,6 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.slf4j.
-
 public class Main{
     private static final int PORT = Integer.parseInt(System.getenv().getOrDefault("PORT","8080"));
     private static GameServer SERVER;
