@@ -7,6 +7,8 @@ COPY src/main/java src/main/java
 
 RUN mkdir -p out
 
+RUN echo "=== LIBS ===" && ls -lah libs
+
 RUN javac \
     -cp "libs/*"  \
     -d out \
