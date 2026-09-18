@@ -19,6 +19,8 @@ public class Main{
 
         SERVER = new GameServer(PORT);
 
+        SERVER.start();
+
         try{
             synchronized (lock){
                 while (true){
