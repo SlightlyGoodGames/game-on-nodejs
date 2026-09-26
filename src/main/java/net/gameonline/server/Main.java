@@ -53,6 +53,8 @@ public class Main{
                 break;
             }
         }
+
+        client.send("Received");
     }
 
     public static void handleClientDisconnect(WebSocket client){
