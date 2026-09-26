@@ -13,17 +13,17 @@ public class GameServer extends WebSocketServer{
 
     @Override
     public void onOpen(WebSocket client, ClientHandshake handshake){
-        System.out.println("New client connected: " + client.getRemoteSocketAddress());
+        Main.handleNewClient(client);
     }
 
     @Override
     public void onClose(WebSocket client,int code,String reason,boolean remote){
-        System.out.println("Client disconnected: " + client.getRemoteSocketAddress() + "\nFor reason: " + reason);
+        Main.handleClientDisconnect(client);
     }
 
     @Override
     public void onMessage(WebSocket client,String message){
-        System.out.println("Client message: " + client.getRemoteSocketAddress() + "\nMessage: " + message);
+        Main.handleClientMessage(client,Main.splitArgs(message));
     }
 
     @Override
