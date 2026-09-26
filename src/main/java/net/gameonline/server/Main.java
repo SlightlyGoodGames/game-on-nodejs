@@ -2,18 +2,12 @@ package net.gameonline.server;
 
 import org.java_websocket.WebSocket;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import static net.gameonline.client.GeneralGlobals.logger;
 
 
 public class Main{
