@@ -43,6 +43,8 @@ public class Main{
     public static void handleNewClient(WebSocket client){
         client.send("Welcome");
         connectedPlayers.add(client);
+
+        System.out.println("Client joined");
     }
 
     public static void handleClientMessage(WebSocket client,Map<String,String> message){
@@ -53,6 +55,8 @@ public class Main{
                 break;
             }
         }
+
+        System.out.println("Recevied message");
 
         client.send("Received");
     }
