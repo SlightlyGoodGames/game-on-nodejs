@@ -50,13 +50,11 @@ public class Main{
     public static void handleClientMessage(WebSocket client,Map<String,String> message){
         switch(message.get("command")){
             case "chat-message":{
-                chatLog.add(message.get("message"));
-                notifyNewMessage(message.get("message"),"Other");
+                chatLog.add(message.get("data"));
+                notifyNewMessage(message.get("data"),"Other");
                 break;
             }
         }
-
-        System.out.println("Recevied message");
 
         client.send("Received");
     }
@@ -75,7 +73,7 @@ public class Main{
                 allArgs.add(regexMatcher.group());
             }
 
-            Map<String, String> toReturn = allArgs.stream().limit(allArgs.size() - 2).map(s -> s.split(":", 2))
+            Map<String, String> toReturn = allArgs.stream().skip(1).map(s -> s.split(":", 2))
                     .collect(Collectors.toMap(tokenisedVer -> tokenisedVer[0], tokenisedVer -> tokenisedVer[1]));
             toReturn.put("command", allArgs.getFirst());
 
@@ -91,7 +89,7 @@ public class Main{
 
     public static void notifyNewMessage(String message,String clientName){
         for(WebSocket client : connectedPlayers){
-            client.send(String.format("chat-message message:%s client:%s",message,clientName));
+            client.send(String.format("chat-message data:%s client:%s",message.replace("\\\"","\""),clientName));
         }
     }
 }
