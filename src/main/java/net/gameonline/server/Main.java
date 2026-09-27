@@ -41,7 +41,6 @@ public class Main{
     }
 
     public static void handleNewClient(WebSocket client){
-        client.send("Welcome");
         connectedPlayers.add(client);
 
         System.out.println("Client joined");
@@ -51,12 +50,10 @@ public class Main{
         switch(message.get("command")){
             case "chat-message":{
                 chatLog.add(message.get("data"));
-                notifyNewMessage(message.get("data"),"Other");
+                notifyNewMessage(message.get("data"),"Other",client);
                 break;
             }
         }
-
-        client.send("Received");
     }
 
     public static void handleClientDisconnect(WebSocket client){
@@ -91,9 +88,11 @@ public class Main{
         }
     }
 
-    public static void notifyNewMessage(String message,String clientName){
+    public static void notifyNewMessage(String message,String clientName,WebSocket originalClient){
         for(WebSocket client : connectedPlayers){
-            client.send(String.format("chat-message data:%s client:%s",message.replace("\\\"","\""),clientName));
+            if(!client.equals(originalClient)) {
+                client.send(String.format("\"chat-message\" \"data:%s\" \"client:%s\"", message.replace("\\\"", "\""), clientName));
+            }
         }
     }
 }
