@@ -73,6 +73,8 @@ public class Main{
                 allArgs.add(regexMatcher.group());
             }
 
+            allArgs.removeIf(s -> s.equals(" "));
+
             Map<String, String> toReturn = allArgs.stream().skip(1).map(s -> s.split(":", 2))
                     .collect(Collectors.toMap(tokenisedVer -> tokenisedVer[0], tokenisedVer -> tokenisedVer[1]));
             toReturn.put("command", allArgs.getFirst());
