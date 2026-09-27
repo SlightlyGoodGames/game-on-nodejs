@@ -79,6 +79,8 @@ public class Main{
 
             return toReturn;
         } catch (Exception e){
+            System.out.println("Formatting error");
+            e.printStackTrace();
             System.out.println("Client has returned a malformed request: "+message);
             Map<String,String> toReturn = new HashMap<>();
             toReturn.put("malformed","true");
