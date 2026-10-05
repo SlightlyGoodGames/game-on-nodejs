@@ -13,8 +13,8 @@ public class GameServer extends WebSocketServer{
 
     @Override
     public void onOpen(WebSocket client,ClientHandshake handshake){
-        Main.findClientLobby(client).handleClientJoin(client);
         Main.handleClientJoin(client);
+        Main.findClientLobby(client).handleClientJoin(client);
     }
 
     @Override
