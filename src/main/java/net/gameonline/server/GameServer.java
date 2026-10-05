@@ -12,18 +12,20 @@ public class GameServer extends WebSocketServer{
     }
 
     @Override
-    public void onOpen(WebSocket client, ClientHandshake handshake){
-        Main.handleNewClient(client);
+    public void onOpen(WebSocket client,ClientHandshake handshake){
+        Main.findClientLobby(client).handleClientJoin(client);
+        Main.handleClientJoin(client);
     }
 
     @Override
     public void onClose(WebSocket client,int code,String reason,boolean remote){
+        Main.findClientLobby(client).handleClientDisconnect(client);
         Main.handleClientDisconnect(client);
     }
 
     @Override
     public void onMessage(WebSocket client,String message){
-        Main.handleClientMessage(client,Main.splitArgs(message));
+        Main.findClientLobby(client).handleClientMessage(client,Main.splitArgs(message));
     }
 
     @Override

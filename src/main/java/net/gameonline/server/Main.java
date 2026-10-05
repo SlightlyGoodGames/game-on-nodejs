@@ -1,5 +1,6 @@
 package net.gameonline.server;
 
+import net.gameonline.server.lobby.*;
 import org.java_websocket.WebSocket;
 
 import java.util.ArrayList;
@@ -9,23 +10,23 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-
 public class Main{
     private static final int PORT = Integer.parseInt(System.getenv().getOrDefault("PORT","8080"));
     private static GameServer SERVER;
     private static final Object lock = new Object();
-    private static final ArrayList<WebSocket> connectedPlayers = new ArrayList<>();
+    private static final Map<WebSocket,Lobby> connectedPlayers = new HashMap<>();
+    private static final ArrayList<Lobby> allLobbies = new ArrayList<>();
     private static final ArrayList<String> chatLog = new ArrayList<>();
+    private static final Lobby waitingLobby = new Lobby();
 
     public static void main(String[] args){
+        allLobbies.add(new ChatLobby());
+
         System.out.println("Started successfully!");
 
         SERVER = new GameServer(PORT);
 
         SERVER.start();
-
-        System.out.println(splitArgs("tictac a:1 b:2").get("a"));
-        System.out.println(splitArgs("tictac \"a:1\" \"b:2\"").get("command"));
 
         try{
             synchronized(lock){
@@ -40,20 +41,12 @@ public class Main{
         }
     }
 
-    public static void handleNewClient(WebSocket client){
-        connectedPlayers.add(client);
-
-        System.out.println("Client joined");
+    public static Lobby findClientLobby(WebSocket client){
+        return connectedPlayers.get(client);
     }
 
-    public static void handleClientMessage(WebSocket client,Map<String,String> message){
-        switch(message.get("command")){
-            case "chat-message":{
-                chatLog.add(message.get("data"));
-                notifyNewMessage(message.get("data"),"Other",client);
-                break;
-            }
-        }
+    public static void handleClientJoin(WebSocket client){
+        connectedPlayers.put(client,allLobbies.getFirst());
     }
 
     public static void handleClientDisconnect(WebSocket client){
@@ -85,14 +78,6 @@ public class Main{
             toReturn.put("malformed","true");
 
             return toReturn;
-        }
-    }
-
-    public static void notifyNewMessage(String message,String clientName,WebSocket originalClient){
-        for(WebSocket client : connectedPlayers){
-            if(!client.equals(originalClient)) {
-                client.send(String.format("\"chat-message\" \"data:%s\" \"client:%s\"", message.replace("\\\"", "\""), clientName));
-            }
         }
     }
 }
