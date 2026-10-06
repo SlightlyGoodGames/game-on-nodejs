@@ -57,16 +57,16 @@ public class Main{
         try {
             ArrayList<String> allArgs = new ArrayList<>();
 
-            Pattern regexPattern = Pattern.compile("(?<=\")(?:[^\"\\\\]|\\\\.)*(?=\")");
+            Pattern regexPattern = Pattern.compile("\"((?:\\\\[\\s\\S]|[^\\\\\"])*)\"");
             Matcher regexMatcher = regexPattern.matcher(message);
-            while (regexMatcher.find()) {
+            while (regexMatcher.find()){
                 allArgs.add(regexMatcher.group());
             }
 
             allArgs.removeIf(s -> s.equals(" "));
 
             Map<String, String> toReturn = allArgs.stream().skip(1).map(s -> s.split(":", 2))
-                    .collect(Collectors.toMap(tokenisedVer -> tokenisedVer[0], tokenisedVer -> tokenisedVer[1]));
+                    .collect(Collectors.toMap(tokenisedVer -> tokenisedVer[0].substring(1), tokenisedVer -> tokenisedVer[1].substring(0,tokenisedVer[1].length()-1)));
             toReturn.put("command", allArgs.getFirst());
 
             return toReturn;
