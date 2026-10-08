@@ -25,6 +25,7 @@ public class GameServer extends WebSocketServer{
 
     @Override
     public void onMessage(WebSocket client,String message){
+        System.out.println("Client sent message " + message);
         Main.findClientLobby(client).handleClientMessage(client,Main.splitArgs(message));
     }
 
