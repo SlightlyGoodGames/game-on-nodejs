@@ -14,10 +14,8 @@ public class Main{
     private static final int PORT = Integer.parseInt(System.getenv().getOrDefault("PORT","8080"));
     private static GameServer SERVER;
     private static final Object lock = new Object();
-    private static final Map<WebSocket,Lobby> connectedPlayers = new HashMap<>();
+    private static final Map<WebSocket,Integer> connectedPlayers = new HashMap<>();
     private static final ArrayList<Lobby> allLobbies = new ArrayList<>();
-    private static final ArrayList<String> chatLog = new ArrayList<>();
-    private static final Lobby waitingLobby = new Lobby();
 
     public static void main(String[] args){
         allLobbies.add(new ChatLobby());
@@ -42,11 +40,11 @@ public class Main{
     }
 
     public static Lobby findClientLobby(WebSocket client){
-        return connectedPlayers.get(client);
+        return allLobbies.get(connectedPlayers.get(client));
     }
 
     public static void handleClientJoin(WebSocket client){
-        connectedPlayers.put(client,allLobbies.getFirst());
+        connectedPlayers.put(client,0);
     }
 
     public static void handleClientDisconnect(WebSocket client){
