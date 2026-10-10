@@ -65,7 +65,7 @@ public class Main{
 
             Map<String, String> toReturn = allArgs.stream().skip(1).map(s -> s.split(":", 2))
                     .collect(Collectors.toMap(tokenisedVer -> tokenisedVer[0].substring(1), tokenisedVer -> tokenisedVer[1].substring(0,tokenisedVer[1].length()-1)));
-            toReturn.put("command", allArgs.getFirst().substring(1,allArgs.size()-1));
+            toReturn.put("command", allArgs.getFirst().substring(1,allArgs.getFirst().length()-1));
 
             return toReturn;
         } catch (Exception e){
